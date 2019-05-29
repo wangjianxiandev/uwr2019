@@ -20,4 +20,4 @@ Universal Word Report
 
 #### 运行项目：
 
-* 将命令行参数.txt中的命令粘贴到Edit Configurations中的项目参数中
+* run ReportGenerator，将命令行参数.txt中的命令粘贴到Edit Configurations中的项目参数中
