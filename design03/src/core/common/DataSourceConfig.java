@@ -42,20 +42,27 @@ public class DataSourceConfig implements DataSourceType {
 	//there should be only one ConstDataSource instance
 	//so this method will return the first DataSource which is of ConstDataSource
 	public ConstDataSource getConstDataSource() {
-		if (dataSources==null) return null;
+		if (dataSources==null) {
+			return null;
+		}
 		for(int i=0; i<dataSources.size(); i++) {
 			DataSource ds = dataSources.get(i);
-			if ("ConstDataSource".equals(ds.getClass().getSimpleName()))
+			if ("ConstDataSource".equals(ds.getClass().getSimpleName())) {
 				return (ConstDataSource)ds;
+			}
 		}
 		return null;
 	}
 	//get desired datasource by name
 	public DataSource getDataSource(String name) {
-		if (name == null || "".equals(name)) return getConstDataSource();
+		if (name == null || "".equals(name)) {
+			return getConstDataSource();
+		}
 		for(int i=0; i<dataSources.size(); i++) {
 			DataSource ds = dataSources.get(i);
-			if (name.equalsIgnoreCase(ds.getName())) return ds;
+			if (name.equalsIgnoreCase(ds.getName())) {
+				return ds;
+			}
 		}
 		return null;
 	}
@@ -73,18 +80,19 @@ public class DataSourceConfig implements DataSourceType {
 		Iterator<DataSource> itr = this.getDataSources().iterator();
 		while(itr.hasNext()) {
 			DataSource ds = itr.next();
-			if (CONST.equalsIgnoreCase(ds.getType())) 
+			if (CONST.equalsIgnoreCase(ds.getType())) {
 				constdss.add(ds);
-			else if (DB.equalsIgnoreCase(ds.getType()))
+			} else if (DB.equalsIgnoreCase(ds.getType())) {
 				dbdss.add(ds);
-			else if (XML.equalsIgnoreCase(ds.getType()))
+			} else if (XML.equalsIgnoreCase(ds.getType())) {
 				xmldss.add(ds);
-			else if (JAR.equalsIgnoreCase(ds.getType()))
+			} else if (JAR.equalsIgnoreCase(ds.getType())) {
 				jardss.add(ds);
-			else if (IMG.equalsIgnoreCase(ds.getType()))
+			} else if (IMG.equalsIgnoreCase(ds.getType())) {
 				imgdss.add(ds);
-			else if (JSON.equalsIgnoreCase(ds.getType()))
+			} else if (JSON.equalsIgnoreCase(ds.getType())) {
 				jsondss.add(ds);
+			}
 		}
 		
 		itr = dbdss.iterator();
@@ -102,25 +110,33 @@ public class DataSourceConfig implements DataSourceType {
 		itr = jsondss.iterator();
 		while(itr.hasNext()) {
 			dh = itr.next().getDataHolder(name);
-			if (dh != null) return dh;
+			if (dh != null) {
+				return dh;
+			}
 		}
 
 		itr = jardss.iterator();
 		while(itr.hasNext()) {
 			dh = itr.next().getDataHolder(name);
-			if (dh != null) return dh;
+			if (dh != null) {
+				return dh;
+			}
 		}
 
 		itr = constdss.iterator();
 		while(itr.hasNext()) {
 			dh = itr.next().getDataHolder(name);
-			if (dh != null) return dh;
+			if (dh != null) {
+				return dh;
+			}
 		}
 		
 		itr = imgdss.iterator();
 		while(itr.hasNext()) {
 			dh = itr.next().getDataHolder(name);
-			if (dh != null) return dh;
+			if (dh != null) {
+				return dh;
+			}
 		}
 
         ReportGenerator.getLogger().debug(name + " can not be found!");

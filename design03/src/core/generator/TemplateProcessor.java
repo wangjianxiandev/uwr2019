@@ -38,10 +38,11 @@ public class TemplateProcessor {
 	private String anyPrefix, outPattern, varPattern, foreachPattern, tmpFilePattern;
 
 	TemplateProcessor(){
-		if (null != prefix && !"".equals(prefix))
+		if (null != prefix && !"".equals(prefix)) {
 			this.anyPrefix = prefix + ":";
-		else
+		} else {
 			this.anyPrefix = "[a-zA-Z]*?:{0,1}";
+		}
 		this.outPattern = "</{0,1}" + anyPrefix + "out\\s+[a-zA-Z]*?=.*?>";
 		this.varPattern = "<" + anyPrefix + "var\\s+[a-zA-Z]*?=.*?/>";
 		this.foreachPattern = "</{0,1}" + anyPrefix + "foreach.*?>";
@@ -93,10 +94,11 @@ public class TemplateProcessor {
 		doc.getRange().replace(Pattern.compile(outPattern), "", options);
 		doc.updateFields();
 		savedFile = output + "." + format;
-		if ("pdf".equals(format))
+		if ("pdf".equals(format)) {
 			doc.save(savedFile, SaveFormat.PDF);
-		else
+		} else {
 			doc.save(savedFile, SaveFormat.DOC);
+		}
 		return savedFile;
 	}
 
@@ -171,8 +173,9 @@ public class TemplateProcessor {
 		DataSourceConfig dsc = DataSourceConfig.newInstance();
 		DataSource ds = dsc.getConstDataSource();
 		//创建一个system变量
-		if (ds != null)
+		if (ds != null) {
 			ds.getVars().add(new VarHolder(ds, "system", "Universal Word Report Generator", LiteralRender.newInstance()));
+		}
 		Document doc;
 		doc = docs.get(filename);
 

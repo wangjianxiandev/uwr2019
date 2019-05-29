@@ -1,7 +1,6 @@
 package core.generator;
 import core.common.*;
 import org.easymock.EasyMock;
-import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +9,12 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.easymock.PowerMock.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DataSourceConfig.class)
@@ -48,7 +49,7 @@ public class TestTemplateProcessor implements DataSourceType{
 		assertEquals("变量testexpr","5.0",dh3.getValue());
 
 		//检测SUT的实际行为模式是否符合预期
-		PowerMock.verifyAll();
+		verifyAll();
 	}
 
 	@Before
@@ -70,7 +71,16 @@ public class TestTemplateProcessor implements DataSourceType{
         //
         //------------------------------------------------
 		//5. 重放所有的行为。
-		PowerMock.replayAll(dsc);
+
+		//使用EasyMock建立一个DataSourceConfig的实例
+		DataSourceConfig dataConfigMock = EasyMock.mock(DataSourceConfig.class);
+
+
+		//使用PowerMock的静态mock
+		PowerMock.mockStatic(DataSourceConfig.class);
+
+
+		replayAll(dsc);
 		//初始化一个待测试类（SUT）的实例
 		tp = new TemplateProcessor();
 	}
