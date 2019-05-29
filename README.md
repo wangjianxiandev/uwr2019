@@ -1,4 +1,4 @@
-# uwr
+﻿# uwr
 Universal Word Report
 
 1、项目配置：
@@ -17,3 +17,7 @@ Universal Word Report
     </datasource>
  </DataSourceConfig>
 ```
+
+#### 运行项目：
+
+* 将命令行参数.txt中的命令粘贴到Edit Configurations中的项目参数中
