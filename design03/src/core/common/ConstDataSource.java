@@ -10,6 +10,7 @@ public class ConstDataSource extends DataSource {
 
 	public ConstDataSource() {
 		super("", CONST);
+		//访问者模式
 		this.setVisitor(new SimpleVisitor(this));
 	}
 

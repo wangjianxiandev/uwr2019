@@ -74,7 +74,7 @@ public class TestTemplateProcessor implements DataSourceType{
 
 		//使用EasyMock建立一个DataSourceConfig的实例
 		DataSourceConfig dataConfigMock = EasyMock.mock(DataSourceConfig.class);
-
+		EasyMock.expect()
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
