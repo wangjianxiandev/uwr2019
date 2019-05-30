@@ -73,8 +73,11 @@ public class TestTemplateProcessor implements DataSourceType{
 		//5. 重放所有的行为。
 
 		//使用EasyMock建立一个DataSourceConfig的实例
-		DataSourceConfig dataConfigMock = EasyMock.mock(DataSourceConfig.class);
-		EasyMock.expect()
+		DataSourceConfig dsc = EasyMock.mock(DataSourceConfig.class);
+		EasyMock.expect(dsc.getConstDataSource().getDataHolder("sex").getValue()).andReturn("Female");
+		EasyMock.expect(dsc.getConstDataSource().getDataHolder("readme").getValue()).andReturn("5");
+		EasyMock.expect(dsc.getConstDataSource().getDataHolder("testexpr").getValue()).andReturn("${num}+${readme}");
+		EasyMock.expect(dsc.getConstDataSource().getDataHolder("testexpr").fillValue().).andReturn("5.0");
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
