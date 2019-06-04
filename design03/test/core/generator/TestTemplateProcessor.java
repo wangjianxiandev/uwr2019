@@ -80,8 +80,8 @@ public class TestTemplateProcessor implements DataSourceType{
 		dsc = EasyMock.createMock(DataSourceConfig.class);
 		//根据DataSource中的内容创建ArrayList<DataHolder> 即挂载变量
 		ArrayList<DataHolder> dataHolders = new ArrayList<>();
-
 		ArrayList<DataSource> dataSources = new ArrayList<>();
+
 		DataHolder dh1 = EasyMock.createMock(DataHolder.class);
 		DataHolder dh2 = EasyMock.createMock(DataHolder.class);
 		DataHolder dh3 = EasyMock.createMock(DataHolder.class);
@@ -122,10 +122,10 @@ public class TestTemplateProcessor implements DataSourceType{
 		EasyMock.expect(dsc.getFilename()).andStubReturn("UwrTest");
 		EasyMock.expect(dsc.getConstDataSource()).andStubReturn(ds);
 		EasyMock.expect(dsc.getDataSource(null)).andStubReturn(ds);
-
 		//重放录制内容，不重放就会报空
 		EasyMock.replay(ds, dh1, dh2, dh3);
-//		System.out.println(dsc.getConstDataSource());
+		//System.out.println(dsc.getConstDataSource());
+
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
