@@ -28,7 +28,9 @@ public class TestTemplateProcessor implements DataSourceType{
 
 	@Test
 	public void testStaticVarExtract() throws Exception {
-
+		//设置待测试类的状态（测试目标方法）
+		tp.staticVarExtract("resource/newtemplatezzz.doc");
+		//以下进行检查点设置
 		DataSource ds = dsc.getConstDataSource();
 
 		List<DataHolder> dhs = ds.getVars();
@@ -51,7 +53,19 @@ public class TestTemplateProcessor implements DataSourceType{
 		//DataSourceConfig.getDataSources(): expected: 1, actual: 0
 		//DataSourceConfig.getFilename(): expected: 1, actual: 0
 		//DataSourceConfig.getDataSource(null): expected: 1, actual: 0
-		verifyAll();
+//		Unexpected method call DataSourceConfig.newInstance():
+//		DataSourceConfig.newInstance(): expected: 1, actual: 2
+		/**
+		 * 解决方案
+		 * Mocking static methods
+		 * Quick summary
+		 * Use the @RunWith(PowerMockRunner.class) annotation at the class-level of the test case.
+		 * Use the @PrepareForTest(ClassThatContainsStaticMethod.class) annotation at the class-level of the test case.
+		 * Use PowerMock.mockStatic(ClassThatContainsStaticMethod.class) to mock all methods of this class.
+		 * Use PowerMock.replay(ClassThatContainsStaticMethod.class) to change the class to replay mode.
+		 * Use PowerMock.verify(ClassThatContainsStaticMethod.class) to change the class to verify mode.
+		 */
+		PowerMock.verifyAll();
 	}
 
 	@Before
@@ -101,22 +115,33 @@ public class TestTemplateProcessor implements DataSourceType{
 		EasyMock.expect(ds.getDataHolder("sex")).andReturn(dh1);
 		EasyMock.expect(ds.getDataHolder("readme")).andReturn(dh2);
 		EasyMock.expect(ds.getDataHolder("testexpr")).andReturn(dh3);
+		EasyMock.expect(ds.getType()).andStubReturn("");
 		//查看函数dsc.getConstDataSource();
 		dataSources.add(ds);
 
+
+		/**dsc中的非静态方法
+		 * getDataSources()
+		 * getFilename()
+		 * getConstDataSource()
+		 * getDataSource(String name)
+		 * getDataHolder(String name)在上面进行
+		 */
 		EasyMock.expect(dsc.getDataSources()).andReturn(dataSources);
-		EasyMock.expect(dsc.getFilename()).andReturn("");
+		EasyMock.expect(dsc.getFilename()).andReturn("UwrTest");
 		EasyMock.expect(dsc.getConstDataSource()).andReturn(ds);
 		EasyMock.expect(dsc.getDataSource(null)).andReturn(ds);
-//		System.out.println(dsc.getConstDataSource());
-		EasyMock.replay(ds, dh1, dh2, dh3);
 
+		//重放录制内容
+		EasyMock.replay(ds, dh1, dh2, dh3);
+//		System.out.println(dsc.getConstDataSource());
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
+		//对静态方法进行测试
 		EasyMock.expect(DataSourceConfig.newInstance()).andReturn(dsc);
 
-		replayAll(dsc);
+		PowerMock.replayAll(dsc);
 		//初始化一个待测试类（SUT）的实例
 		tp = new TemplateProcessor();
 	}
