@@ -16,6 +16,7 @@ public class DataSourceConfig implements DataSourceType {
 	
 	private static final DataSourceConfig dsc = new DataSourceConfig();
 	private String filename = null;
+	//根据此处得知DataSource从ArrayList中获取
 	private ArrayList<DataSource> dataSources = null;
 	
 	private DataSourceConfig(){}
@@ -42,6 +43,7 @@ public class DataSourceConfig implements DataSourceType {
 	//there should be only one ConstDataSource instance
 	//so this method will return the first DataSource which is of ConstDataSource
 	public ConstDataSource getConstDataSource() {
+		//通过DataSource的ArrayList进行获取
 		if (dataSources==null) {
 			return null;
 		}

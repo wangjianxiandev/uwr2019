@@ -63,11 +63,13 @@ public class ExprEvaluator extends DataLoader {
 		logger.debug(varexpr);
 		if (varexpr != null && !varexpr.equals(expr)) {
 			DataHolder dhInExpr = DataSourceConfig.newInstance().getDataHolder(varexpr);
-			if (dhInExpr == null) varexpr = "[ " + varexpr + " is not a variable, please check configuration or template!]";
-			else if (dhInExpr.getValue()!=null && !"".equals(dhInExpr.getValue()))
-					varexpr = expr.replaceAll(java.util.regex.Pattern.quote("${"+varexpr+"}"), (String)(dhInExpr.getValue()));
-			else if (dhInExpr.getExpr()!=null && !"".equals(dhInExpr.getExpr()))
+			if (dhInExpr == null) {
+				varexpr = "[ " + varexpr + " is not a variable, please check configuration or template!]";
+			} else if (dhInExpr.getValue()!=null && !"".equals(dhInExpr.getValue())) {
+				varexpr = expr.replaceAll(java.util.regex.Pattern.quote("${"+varexpr+"}"), (String)(dhInExpr.getValue()));
+			} else if (dhInExpr.getExpr()!=null && !"".equals(dhInExpr.getExpr())) {
 				varexpr = expr.replaceAll(java.util.regex.Pattern.quote("${"+varexpr+"}"), "("+Matcher.quoteReplacement(dhInExpr.getExpr()) + ")");
+			}
 			dh.setExpr(varexpr);
 			return fill(dh);
 		} else {

@@ -60,6 +60,7 @@ public abstract class DataSource implements DataSourceType {
 		return vars;
 	}
 
+	//设置挂载参数
 	public void setVars(ArrayList<DataHolder> vars) {
 		if (vars != null) {
 			this.vars = vars;
