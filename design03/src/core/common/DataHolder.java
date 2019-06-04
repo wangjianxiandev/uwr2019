@@ -41,17 +41,21 @@ public abstract class DataHolder implements DataType {
 	//数据填充
 	public  String fillValue() throws Exception {
 		
-		if (this.getValue() != null)  return null; //already filled
-		if (this.getHolderFiller() != null)
+		if (this.getValue() != null) {
+			return null; //already filled
+		}
+		if (this.getHolderFiller() != null) {
 			return getHolderFiller().fill(this);
-		else
+		} else {
 			return null;
+		}
 	}
 	
 	//数据呈现
 	public  int renderValue(ReplacingArgs e, String[] varinfo) throws Exception {
-		if (getHolderRender()!=null)
+		if (getHolderRender()!=null) {
 			return getHolderRender().render(this, e, varinfo);
+		}
 		return ReplaceAction.SKIP;
 	}
 	
@@ -76,14 +80,15 @@ public abstract class DataHolder implements DataType {
 	}
 
 	public void setType(String type) {
-		if(VALUE.equalsIgnoreCase(type.trim()))
+		if(VALUE.equalsIgnoreCase(type.trim())) {
 			this.type = VALUE;
-		else if(LIST.equalsIgnoreCase(type.trim()))
+		} else if(LIST.equalsIgnoreCase(type.trim())) {
 			this.type = LIST;
-		else if(MAP.equalsIgnoreCase(type.trim()))
+		} else if(MAP.equalsIgnoreCase(type.trim())) {
 			this.type = MAP;
-		else
+		} else {
 			this.type = NA;
+		}
 	}
 
 	public String getName() {
@@ -92,10 +97,11 @@ public abstract class DataHolder implements DataType {
 
 	public void setName(String name) {
 		//名字不分大小写，程序内部全部转成小写
-		if (name != null)
+		if (name != null) {
 			this.name = name.trim().toLowerCase();
-		else
+		} else {
 			this.name = "";
+		}
 	}
 
 	public DataSource getDataSource() {
@@ -146,9 +152,11 @@ public abstract class DataHolder implements DataType {
 		Date date = new Date();
 		if (format == null || "".equals(format))
 			//默认格式
+		{
 			fmt = "YYYY年MM月dd日";
-		else
+		} else {
 			fmt = format;
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(fmt);
 		this.setSwap(sdf.format(date));
 		return sdf.format(date);
@@ -158,9 +166,14 @@ public abstract class DataHolder implements DataType {
 	public String trim(String attrname) {
 		Object val = this.getValue();
 		String s = null;
-		if (val instanceof String) s = (String) val;
-		else return null;
-		if (s != null) s=s.trim();
+		if (val instanceof String) {
+			s = (String) val;
+		} else {
+			return null;
+		}
+		if (s != null) {
+			s=s.trim();
+		}
 		this.setSwap(s);
 		return s;
 	}
@@ -197,7 +210,9 @@ public abstract class DataHolder implements DataType {
 		if (val instanceof String) s = (String) val;
 		else return null;
 		
-		if(parms == null || "".equals(parms)) return null;
+		if(parms == null || "".equals(parms)) {
+			return null;
+		}
 		double d = Double.valueOf(s);
 		s = String.format(parms, d);
 		this.setSwap(s);

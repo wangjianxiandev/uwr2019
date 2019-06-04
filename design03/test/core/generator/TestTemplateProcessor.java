@@ -10,6 +10,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -28,9 +29,6 @@ public class TestTemplateProcessor implements DataSourceType{
 	@Test
 	public void testStaticVarExtract() throws Exception {
 
-		//设置待测试类的状态（测试目标方法）
-		tp.staticVarExtract("resource/newtemplatezzz.doc");
-		//以下进行检查点设置
 		DataSource ds = dsc.getConstDataSource();
 
 		List<DataHolder> dhs = ds.getVars();
@@ -55,29 +53,28 @@ public class TestTemplateProcessor implements DataSourceType{
 	@Before
 	public void setUp() throws Exception {
 
-		//以下采用Mock对象的方式，做测试前的准备。
-		//与以上方法比较，好处是降低SUT（TemplateProcessor类）与DOC（DataSourceConfig类）之间的耦合性，解耦它们。
-		//从而使得定位缺陷变得容易。
-		//参照流程：
-		//1. 使用EasyMock建立一个DataSourceConfig类的一个Mock对象实例；
-		//2. 录制该实例的STUB模式和行为模式（针对的是非静态方法）；
-		//3. 使用PowerMock建立DataSourceConfig类的静态Mock；
-		//4. 录制该静态Mock的行为模式（针对的是静态方法）；
-        //------------------------------------------------
-        //以上流程请在这里实现：
-        //
-        //
-        // 这里写代码
-        //
-        //------------------------------------------------
-		//5. 重放所有的行为。
+		//使用EasyMock建立一个DataSourceConfig和DataHolder的实例
+		dsc = EasyMock.mock(DataSourceConfig.class);
+		ArrayList<DataHolder> dataHolders = new ArrayList<>();
+		DataHolder dh1 = EasyMock.mock(DataHolder.class);
+		DataHolder dh2 = EasyMock.mock(DataHolder.class);
+		DataHolder dh3 = EasyMock.mock(DataHolder.class);
+		dh1.setName("sex");
+		dh2.setName("readme");
+		dh3.setName("testexpr");
+		EasyMock.expect(dh1.getValue()).andReturn("Female");
+		EasyMock.expect(dh2.getValue()).andReturn("5");
+		EasyMock.expect(dh3.getExpr()).andReturn("${num}+${readme}");
+		EasyMock.expect(dh3.fillValue()).andReturn("5.0");
 
-		//使用EasyMock建立一个DataSourceConfig的实例
-		DataSourceConfig dsc = EasyMock.mock(DataSourceConfig.class);
-		EasyMock.expect(dsc.getConstDataSource().getDataHolder("sex").getValue()).andReturn("Female");
-		EasyMock.expect(dsc.getConstDataSource().getDataHolder("readme").getValue()).andReturn("5");
-		EasyMock.expect(dsc.getConstDataSource().getDataHolder("testexpr").getValue()).andReturn("${num}+${readme}");
-		EasyMock.expect(dsc.getConstDataSource().getDataHolder("testexpr").fillValue().).andReturn("5.0");
+		dataHolders.add(dh1);
+		dataHolders.add(dh2);
+		dataHolders.add(dh3);
+
+		//获取DataSource实例
+		DataSource ds = EasyMock.mock(DataSource.class);
+
+
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
