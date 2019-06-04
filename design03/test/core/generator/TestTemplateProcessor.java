@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.powermock.api.easymock.PowerMock.*;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DataSourceConfig.class)
@@ -55,16 +55,7 @@ public class TestTemplateProcessor implements DataSourceType{
 		//DataSourceConfig.getDataSource(null): expected: 1, actual: 0
 //		Unexpected method call DataSourceConfig.newInstance():
 //		DataSourceConfig.newInstance(): expected: 1, actual: 2
-		/**
-		 * 解决方案
-		 * Mocking static methods
-		 * Quick summary
-		 * Use the @RunWith(PowerMockRunner.class) annotation at the class-level of the test case.
-		 * Use the @PrepareForTest(ClassThatContainsStaticMethod.class) annotation at the class-level of the test case.
-		 * Use PowerMock.mockStatic(ClassThatContainsStaticMethod.class) to mock all methods of this class.
-		 * Use PowerMock.replay(ClassThatContainsStaticMethod.class) to change the class to replay mode.
-		 * Use PowerMock.verify(ClassThatContainsStaticMethod.class) to change the class to verify mode.
-		 */
+
 		PowerMock.verifyAll();
 	}
 
@@ -97,11 +88,11 @@ public class TestTemplateProcessor implements DataSourceType{
 		dh1.setName("sex");
 		dh2.setName("readme");
 		dh3.setName("testexpr");
-		EasyMock.expect(dh1.getValue()).andReturn("Female");
-		EasyMock.expect(dh2.getValue()).andReturn("5");
-		EasyMock.expect(dh3.getExpr()).andReturn("${num}+${readme}");
-		EasyMock.expect(dh3.fillValue()).andReturn(null);
-		EasyMock.expect(dh3.getValue()).andReturn("5.0");
+		EasyMock.expect(dh1.getValue()).andStubReturn("Female");
+		EasyMock.expect(dh2.getValue()).andStubReturn("5");
+		EasyMock.expect(dh3.getExpr()).andStubReturn("${num}+${readme}");
+		EasyMock.expect(dh3.fillValue()).andStubReturn(null);
+		EasyMock.expect(dh3.getValue()).andStubReturn("5.0");
 
 		dataHolders.add(dh1);
 		dataHolders.add(dh2);
@@ -111,10 +102,10 @@ public class TestTemplateProcessor implements DataSourceType{
 		ConstDataSource ds = EasyMock.createMock(ConstDataSource.class);
 		//设置挂载参数
 		ds.setVars(dataHolders);
-		EasyMock.expect(ds.getVars()).andReturn(dataHolders);
-		EasyMock.expect(ds.getDataHolder("sex")).andReturn(dh1);
-		EasyMock.expect(ds.getDataHolder("readme")).andReturn(dh2);
-		EasyMock.expect(ds.getDataHolder("testexpr")).andReturn(dh3);
+		EasyMock.expect(ds.getVars()).andStubReturn(dataHolders);
+		EasyMock.expect(ds.getDataHolder("sex")).andStubReturn(dh1);
+		EasyMock.expect(ds.getDataHolder("readme")).andStubReturn(dh2);
+		EasyMock.expect(ds.getDataHolder("testexpr")).andStubReturn(dh3);
 		EasyMock.expect(ds.getType()).andStubReturn("");
 		//查看函数dsc.getConstDataSource();
 		dataSources.add(ds);
@@ -127,19 +118,20 @@ public class TestTemplateProcessor implements DataSourceType{
 		 * getDataSource(String name)
 		 * getDataHolder(String name)在上面进行
 		 */
-		EasyMock.expect(dsc.getDataSources()).andReturn(dataSources);
-		EasyMock.expect(dsc.getFilename()).andReturn("UwrTest");
-		EasyMock.expect(dsc.getConstDataSource()).andReturn(ds);
-		EasyMock.expect(dsc.getDataSource(null)).andReturn(ds);
+		EasyMock.expect(dsc.getDataSources()).andStubReturn(dataSources);
+		EasyMock.expect(dsc.getFilename()).andStubReturn("UwrTest");
+		EasyMock.expect(dsc.getConstDataSource()).andStubReturn(ds);
+		EasyMock.expect(dsc.getDataSource(null)).andStubReturn(ds);
 
-		//重放录制内容
+		//重放录制内容，不重放就会报空
 		EasyMock.replay(ds, dh1, dh2, dh3);
 //		System.out.println(dsc.getConstDataSource());
 
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
 		//对静态方法进行测试
-		EasyMock.expect(DataSourceConfig.newInstance()).andReturn(dsc);
+		EasyMock.expect(DataSourceConfig.newInstance()).andStubReturn(dsc);
+
 
 		PowerMock.replayAll(dsc);
 		//初始化一个待测试类（SUT）的实例
