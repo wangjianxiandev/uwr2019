@@ -47,6 +47,10 @@ public class TestTemplateProcessor implements DataSourceType{
 		assertEquals("变量testexpr","5.0",dh3.getValue());
 
 		//检测SUT的实际行为模式是否符合预期
+		//出现问题
+		//DataSourceConfig.getDataSources(): expected: 1, actual: 0
+		//DataSourceConfig.getFilename(): expected: 1, actual: 0
+		//DataSourceConfig.getDataSource(null): expected: 1, actual: 0
 		verifyAll();
 	}
 
