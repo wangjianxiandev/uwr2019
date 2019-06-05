@@ -1,4 +1,4 @@
-package core.generator;
+﻿package core.generator;
 import core.common.*;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -67,16 +67,6 @@ public class TestTemplateProcessor implements DataSourceType{
 		//参照流程：
 		//1. 使用EasyMock建立一个DataSourceConfig类的一个Mock对象实例；
 		//2. 录制该实例的STUB模式和行为模式（针对的是非静态方法）；
-		//3. 使用PowerMock建立DataSourceConfig类的静态Mock；
-		//4. 录制该静态Mock的行为模式（针对的是静态方法）；
-		//------------------------------------------------
-		//以上流程请在这里实现：
-		//
-		//
-		// 这里写代码
-		//
-		//------------------------------------------------
-		//5. 重放所有的行为。
 		dsc = EasyMock.createMock(DataSourceConfig.class);
 		//根据DataSource中的内容创建ArrayList<DataHolder> 即挂载变量
 		ArrayList<DataHolder> dataHolders = new ArrayList<>();
@@ -125,12 +115,15 @@ public class TestTemplateProcessor implements DataSourceType{
 		//重放录制内容，不重放就会报空
 		EasyMock.replay(ds, dh1, dh2, dh3);
 		//System.out.println(dsc.getConstDataSource());
-
-
+		//3. 使用PowerMock建立DataSourceConfig类的静态Mock；
+		//4. 录制该静态Mock的行为模式（针对的是静态方法）；
 		//使用PowerMock的静态mock
 		PowerMock.mockStatic(DataSourceConfig.class);
 		//对静态方法进行测试
 		EasyMock.expect(DataSourceConfig.newInstance()).andStubReturn(dsc);
+		//------------------------------------------------
+		//5. 重放所有的行为。
+
 
 
 		PowerMock.replayAll(dsc);
